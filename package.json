@@ -1,0 +1,54 @@
+{
+  "name": "task-manager.my",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@deveodk/vue-toastr": "^1.0.4",
+    "@mdi/font": "^2.4.85",
+    "axios": "^0.18.0",
+    "epic-spinners": "^1.0.3",
+    "firebase": "^5.2.0",
+    "vue": "^2.5.16",
+    "vue-axios": "^2.1.1",
+    "vue-cookie": "^1.1.4",
+    "vue-router": "^3.0.1",
+    "vuejs-noty": "^0.1.3",
+    "vuetify": "^1.1.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.0-beta.15",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.15",
+    "@vue/cli-service": "^3.0.0-beta.15",
+    "vue-template-compiler": "^2.5.16"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

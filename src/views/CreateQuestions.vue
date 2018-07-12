@@ -1,94 +1,108 @@
 <template>
-  <v-container>
-    <v-layout>
-      <v-flex px-0>
-        <indicator
-          @select="activeQuestion = $event"
-          @create="addQuestion"
-          :active="activeQuestion"
-          :isCreateButton="true"
-          :amount="qInfo.questions.length" />
-      </v-flex>
-    </v-layout>
-      
-    <question-builder
-      :questionData="qInfo.questions[activeQuestion]"
-      @addAnswer="addAnswer"
-      class="question-wrapper"/>
+  <v-container fluid>
+    <v-card>
+      <v-tabs
+      centered
+      color="blue-grey lighten-5"
+      fixed-tabs
+      v-model="currentTab">
+      <v-tab
+        key="settings">
+        Settings  
+      </v-tab>
 
-      <v-speed-dial
-        transition="slide-y-reverse-transition"
-        :fixed="true"
-        :top="false"
-        :bottom="true"
-        :left="false"
-        :right="true"
-        direction="top"
-        v-model="isSettingsOpen">
-          <v-btn
-            slot="activator"
-            v-model="isSettingsOpen"
-            color="blue darken-2"
-            dark
-            fab
-          >
-            <v-icon>settings</v-icon>
-            <v-icon>close</v-icon>
-          </v-btn>
+      <v-tab
+        key="questions">
+        Questions
+      </v-tab>
 
-           <v-btn
-        fab
-        dark
-        small
-        color="green"
-      >
-        <v-icon>edit</v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        dark
-        small
-        color="indigo"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-      <v-tooltip left>
-        <v-btn
-          fab
-          dark
-          slot="activator"
-          small
-          @click="saveQuestionSet"
-          color="red">
-          <v-icon>save</v-icon>
-        </v-btn>
-        <span>Save questions set</span>
-      </v-tooltip>
-      </v-speed-dial>
+      <v-tab
+        key="intro-end">
+        Intro / End Page
+      </v-tab>
+
+        <v-tab-item
+          class="height-full-screen mt-3"
+          key="settings">
+          <v-layout row wrap>
+            <v-flex xs12 md2><h3 class="heading pre-input-text">Question set name:</h3></v-flex>
+
+            <v-flex xs12 md10>
+              <v-text-field
+                hint="Will be visible for others users"
+                v-model="qInfo.name"
+                solo
+                label="Name">
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-tab-item>
+
+        <v-tab-item
+          class="height-full-screen mt-3"
+          key="questions">
+          <v-layout>
+            <v-flex px-0>
+              <indicator
+                @select="activeQuestion = $event"
+                @create="addQuestion"
+                :active="activeQuestion"
+                :isCreateButton="true"
+                :amount="qInfo.questions.length" />
+            </v-flex>
+          </v-layout>
+            
+          <question-builder
+            :questionData="qInfo.questions[activeQuestion]"
+            @addAnswer="addAnswer"
+            class="question-wrapper"/>
+        </v-tab-item>
+
+        <v-tab-item
+          class="height-full-screen mt-3"
+          key="intro-end">
+          INTRO AND END PAGES
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
+
+    <floating-button  @save="saveQuestionSet" />
   </v-container>
 </template>
 
 <script>
-import QuestionBuilder from '@/components/QuestionBuilder'
-import Indicator from '@/components/QuestionsIndicator'
+import QuestionBuilder from '@/components/CreateQuestion/QuestionBuilder'
+import Indicator from '@/components/CreateQuestion/QuestionsIndicator'
+import FloatingButton from '@/components/CreateQuestion/FloatButton'
 import firebase from 'firebase'
 
 export default {
   name: 'CreateQuestions',
   components: {
     QuestionBuilder,
-    Indicator
+    Indicator,
+    FloatingButton
   },
   data: () =>  ({
     activeQuestion: 0,
+    currentTab: 'settings',
     qType: 'public',
-    isSettingsOpen: false,
     qInfo: {
-      introText: 'intro text',
+      name: '',
+      intro: {
+        introText: 'intro text',
+        introBg: 'link'
+      },
+      endPage: {
+        text: ''
+      },
       questions: [
         {
           question: '',
+          image: '',
           maxRating: 2,
+          timeForAnswer: 0,
+          id: 'q-' + Date.now(),
           required: 'not required',
           answerType: 'single',
           answers: []
@@ -100,7 +114,10 @@ export default {
     addQuestion () {
       const newQuestion = {
         question: '',
+        image: '',
         maxRating: 2,
+        timeForAnswer: 0,
+        id: 'q-' + Date.now(),
         required: 'not required',
         answerType: 'single',
         answers: []
@@ -112,8 +129,9 @@ export default {
       this.qInfo.questions[this.activeQuestion].answers.push({answer: ''})
     },
     saveQuestionSet () {
+      let id = Date.now()
       firebase.database().ref().child('questions').child(this.qType).update({
-        [Date.now()]: this.qInfo
+        [id]: {...this.qInfo, id}
       }, () => {
         this.$noty.success('Question list saved')
       })

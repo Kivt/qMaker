@@ -24,18 +24,7 @@
         <v-tab-item
           class="height-full-screen mt-3"
           key="settings">
-          <v-layout row wrap>
-            <v-flex xs12 md2><h3 class="heading pre-input-text">Question set name:</h3></v-flex>
-
-            <v-flex xs12 md10>
-              <v-text-field
-                hint="Will be visible for others users"
-                v-model="qInfo.name"
-                solo
-                label="Name">
-              </v-text-field>
-            </v-flex>
-          </v-layout>
+          <settings :questionData="qInfo" />
         </v-tab-item>
 
         <v-tab-item
@@ -74,6 +63,7 @@
 import QuestionBuilder from '@/components/CreateQuestion/QuestionBuilder'
 import Indicator from '@/components/CreateQuestion/QuestionsIndicator'
 import FloatingButton from '@/components/CreateQuestion/FloatButton'
+import Settings from '@/components/CreateQuestion/Settings'
 import firebase from 'firebase'
 
 export default {
@@ -81,34 +71,37 @@ export default {
   components: {
     QuestionBuilder,
     Indicator,
-    FloatingButton
+    FloatingButton,
+    Settings
   },
-  data: () =>  ({
+  data: () => ({
     activeQuestion: 0,
     currentTab: 'settings',
-    qType: 'public',
     qInfo: {
       name: '',
+      type: 'public',
+      dueTo: null,
       intro: {
-        introText: 'intro text',
-        introBg: 'link'
+        introText: '',
+        introBg: ''
       },
       endPage: {
-        text: ''
+        text: '',
+        endBg: ''
       },
       questions: [
         {
           question: '',
           image: '',
-          maxRating: 2,
+          maxRating: 3,
           timeForAnswer: 0,
           id: 'q-' + Date.now(),
           required: 'not required',
           answerType: 'single',
           answers: []
-        }
-      ]
-    }
+        },
+      ],
+    },
   }),
   methods: {
     addQuestion () {
@@ -129,14 +122,16 @@ export default {
       this.qInfo.questions[this.activeQuestion].answers.push({answer: ''})
     },
     saveQuestionSet () {
-      let id = Date.now()
-      firebase.database().ref().child('questions').child(this.qType).update({
-        [id]: {...this.qInfo, id}
+      let author = this.$root.currentUser.uid
+
+      firebase.database().ref().child('question_sets').update({
+        [Date.now()]: {...this.qInfo, author}
       }, () => {
         this.$noty.success('Question list saved')
+        this.$router.push({name: 'Home'})
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

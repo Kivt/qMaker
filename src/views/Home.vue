@@ -1,38 +1,112 @@
 <template>
-	<v-container home-wrapper v-if="$root.currentUser">
-		<alert type="warning" v-if="!$root.currentUser.emailVerified" :isOpen="true" />
+  <v-container fluid home-wrapper v-if="$root.currentUser">
+    <alert type="warning" v-if="!$root.currentUser.emailVerified" :isOpen="true" />
 
-		<div v-if="$root.currentUser.emailVerified">
-			<v-layout row>
-				<v-flex xs12 md6 lg3>
-					<v-card>
-						<v-card-title primary-title>
-							<h3>Public questions list</h3>
-							<v-spacer></v-spacer>
-							<v-btn
-								icon
-								@click="$router.push({name: 'create-questions'})">
-								<v-icon>add</v-icon>
-							</v-btn>
-						</v-card-title>
-					</v-card>
-				</v-flex>
+    <div v-if="$root.currentUser.emailVerified">
+      <v-layout row wrap>
+        <v-flex xs12 md6 lg3 mb-3>
+          <v-card>
+            <v-card-title primary-title>
+              <h3>Your questions list</h3>
+              <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="$router.push({name: 'Create-questions'})">
+                <v-icon>add</v-icon>
+              </v-btn>
+            </v-card-title>
 
-				<v-flex xs-12 md6 9>
+            <v-list>
+              <v-list-tile
+                v-for="(question, index) in questionList"
+                @click="goToQuestionDetails"
+                :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ question.name }}</v-list-tile-title>
+                </v-list-tile-content>
 
-				</v-flex>
-			</v-layout>
-		</div>
-	</v-container>
+                <v-list-tile-content>
+                  <v-list-tile-sub-title
+                    :class="(question.type === 'private' ? 'red' : 'green') + '--text'">
+                    {{ question.type }}
+                  </v-list-tile-sub-title>
+                </v-list-tile-content>
+
+                 <v-list-tile-action>
+                   <v-btn icon ripple>
+                     <v-icon>chevron_right</v-icon>
+                   </v-btn>
+                 </v-list-tile-action>
+              </v-list-tile>
+            </v-list>
+          </v-card>
+        </v-flex>
+
+        <v-flex xs-12 md6 lg3 mb-3>
+          <v-card>
+            <v-card-title primary-title>
+              <h3>Available Question Sets</h3>
+              <v-spacer></v-spacer>
+              <v-btn icon ripple>
+                <v-icon>chevron_right</v-icon>
+              </v-btn>
+            </v-card-title>
+
+            <v-list>
+              <v-list-tile
+                v-for="(key, value, index) in questionList"
+                @click="goToTest(value)"
+                :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ key.name }}</v-list-tile-title>
+                </v-list-tile-content>
+
+                 <v-list-tile-action>
+                   <v-btn icon ripple>
+                     <v-icon>chevron_right</v-icon>
+                   </v-btn>
+                 </v-list-tile-action>
+              </v-list-tile>
+            </v-list>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </div>
+  </v-container>
 </template>
 
 <script>
 import Alert from '@/components/Alert'
+import firebase from 'firebase'
 
 export default {
-	name: 'Home',
-	components: {
-		Alert
-	}
+  name: 'Home',
+  components: {
+    Alert
+  },
+  data: () => ({
+    questionList: {}
+  }),
+  created () {
+    firebase.database().ref('question_sets').on('value', (snapshot) => {
+      this.updateQuestionList(snapshot.val())
+    })
+  },
+  computed: {
+    myQuestionSets() {
+      return questionList
+    }
+  },
+  methods: {
+    updateQuestionList (value) {
+      this.questionList = value
+    },
+    goToQuestionDetails () {
+      // TODO
+    },
+    goToTest(testId) {
+      this.$router.push(`/test/${testId}`)
+    }
+  },
 }
 </script>

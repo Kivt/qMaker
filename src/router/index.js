@@ -11,24 +11,24 @@ const router = new VueRouter({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/Login')
+      component: () => import('@/views/Login'),
     },
     {
       path: '/signup',
       name: 'Sign Up',
-      component: () => import('@/views/SignUp')
+      component: () => import('@/views/SignUp'),
     },
     {
       path: '/',
       component: () => import('@/views/Private'),
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
       },
       children: [
         {
           path: '',
           name: 'Home',
-          component: () => import('@/views/Home')
+          component: () => import('@/views/Home'),
         },
         {
           path: 'profile',
@@ -37,15 +37,20 @@ const router = new VueRouter({
         },
         {
           path: 'create',
-          name: 'create-questions', 
+          name: 'Create-questions', 
           component: () => import('@/views/CreateQuestions'),
-          props: true
-        }
-      ]
+          props: true,
+        },
+        {
+          path: 'test/:id',
+          name: 'Take-test',
+          component: () => import('@/views/TakeTest'),
+        },
+      ],
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/',
     }
   ]
 })

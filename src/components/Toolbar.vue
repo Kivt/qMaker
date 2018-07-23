@@ -3,7 +3,7 @@
 		<v-toolbar-title @click="$router.push('/')">qMaker</v-toolbar-title>
 
     <v-spacer></v-spacer>
-    <div>{{$root.currentUser.displayName || 'NoName'}}</div>
+    <div>{{user.userName}}</div>
     <v-menu
       bottom
       origin="center center"
@@ -31,6 +31,14 @@ import firebase from 'firebase'
 
 export default {
   name: 'Toolbar',
+  data: () => ({
+    user: {}
+  }),
+  created () {
+    firebase.database().ref('users/' + this.$root.currentUser.uid ).on('value', (snapshot) => {
+      this.user = snapshot.val()
+    })
+  },
   methods: {
     logOut () {
       firebase.auth().signOut().then(() => {

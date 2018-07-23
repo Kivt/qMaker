@@ -38,7 +38,7 @@
               label="Maximal Rating"
               v-model="question.maxRating"
               solo
-              :items="[2,3,4,5,6,7,8,9,10]"
+              :items="[3,5,10]"
               :hide-details="true">
             </v-select>
           </v-flex>

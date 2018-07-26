@@ -92,11 +92,6 @@ export default {
       this.updateQuestionList(snapshot.val())
     })
   },
-  computed: {
-    myQuestionSets() {
-      return questionList
-    }
-  },
   methods: {
     updateQuestionList (value) {
       this.questionList = value

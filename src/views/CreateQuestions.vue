@@ -50,7 +50,7 @@
         <v-tab-item
           class="height-full-screen mt-3"
           key="intro-end">
-          INTRO AND END PAGES
+          <intro-end-pages :questionData="qInfo" />
         </v-tab-item>
       </v-tabs>
     </v-card>
@@ -64,6 +64,7 @@ import QuestionBuilder from '@/components/CreateQuestion/QuestionBuilder'
 import Indicator from '@/components/CreateQuestion/QuestionsIndicator'
 import FloatingButton from '@/components/CreateQuestion/FloatButton'
 import Settings from '@/components/CreateQuestion/Settings'
+import IntroEndPages from '@/components/CreateQuestion/IntroEndPages'
 import firebase from 'firebase'
 
 export default {
@@ -72,7 +73,8 @@ export default {
     QuestionBuilder,
     Indicator,
     FloatingButton,
-    Settings
+    Settings,
+    IntroEndPages,
   },
   data: () => ({
     activeQuestion: 0,
@@ -82,12 +84,12 @@ export default {
       type: 'public',
       dueTo: null,
       intro: {
-        introText: '',
-        introBg: ''
+        text: '',
+        bg: ''
       },
       endPage: {
         text: '',
-        endBg: ''
+        bg: ''
       },
       questions: [
         {
@@ -108,7 +110,7 @@ export default {
       const newQuestion = {
         question: '',
         image: '',
-        maxRating: 2,
+        maxRating: 3,
         timeForAnswer: 0,
         id: 'q-' + Date.now(),
         required: 'not required',

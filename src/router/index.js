@@ -13,10 +13,16 @@ const router = new VueRouter({
       name: 'Login',
       component: () => import('@/views/Login'),
     },
+    
     {
       path: '/signup',
       name: 'Sign Up',
       component: () => import('@/views/SignUp'),
+    },
+    {
+      path: '/test/:id',
+      name: 'Take-test',
+      component: () => import('@/views/TakeTest'),
     },
     {
       path: '/',
@@ -41,11 +47,6 @@ const router = new VueRouter({
           component: () => import('@/views/CreateQuestions'),
           props: true,
         },
-        {
-          path: 'test/:id',
-          name: 'Take-test',
-          component: () => import('@/views/TakeTest'),
-        },
       ],
     },
     {
@@ -60,7 +61,6 @@ router.beforeEach((to, from, next) => {
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
   if (requiresAuth && !currentUser) next('/login')
-  else if (!requiresAuth && currentUser) next('/')
   else next()
 })
 

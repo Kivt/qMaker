@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-layout row wrap>
-      <v-flex xs12 md2><h3 class="heading pre-input-text">Question set name:</h3></v-flex>
+      <v-flex xs12 md2>
+        <h3 class="heading pre-input-text">Question set name:</h3>
+      </v-flex>
 
       <v-flex xs12 md10>
         <v-text-field
@@ -16,7 +18,9 @@
     <v-layout row wrap>
       <v-flex xs12 md6 px-0>
         <v-layout row wrap>
-          <v-flex xs12 md4><h3 class="heading pre-input-text">Select type:</h3></v-flex>
+          <v-flex xs12 md4>
+            <h3 class="heading pre-input-text">Select type:</h3>
+          </v-flex>
 
           <v-flex xs12 md8>
             <v-select
@@ -32,7 +36,9 @@
 
       <v-flex xs12 md6 px-0>
         <v-layout row wrap>
-          <v-flex xs12 md2><h3 class="heading pre-input-text">Due to:</h3></v-flex>
+          <v-flex xs12 md2>
+            <h3 class="heading pre-input-text">Due to:</h3>
+          </v-flex>
 
           <v-flex xs12 md10>
             <v-menu full-width>

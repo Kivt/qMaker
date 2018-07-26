@@ -60,3 +60,28 @@ i {
   justify-content: center!important;
   align-items: center!important;
 }
+
+.avesome-divider {
+  width: 100%;
+  position: relative;
+  height: 1px;
+  opacity: 0.4;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 35%,
+    rgba(255, 255, 255, 1) 65%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.rotate:hover {
+  animation-name: rotate;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes rotate {
+  100% { transform: rotate(360deg) }
+}

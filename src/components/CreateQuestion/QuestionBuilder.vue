@@ -17,7 +17,7 @@
             <v-select
               label="Type"
               solo
-              :items="answerTypesArr"
+              :items="answerTypes"
               :hide-details="true"
               v-model="question.answerType">
             </v-select>
@@ -71,16 +71,18 @@
 </template>
 
 <script>
+import config from '@/settings/settings'
+
 export default {
   name: 'QuestionBuilder',
   props: {
     questionData: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data: () => ({
-    answerTypesArr: ['single', 'multiple', 'text', 'rating']
+    answerTypes: config.answerTypes,
   }),
   computed: {
     question () {

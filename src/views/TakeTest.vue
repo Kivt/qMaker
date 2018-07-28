@@ -2,13 +2,13 @@
   <div>
     <div v-if="isAvailable">
       <start-page
-        v-show="state === 0"
+        v-if="state === 0"
         @start="startTest"
         :introData="qSetData.intro" />
 
       <take-questions
-         v-show="state === 1"
-         :answers="answers"
+        v-if="state === 1"
+        @selectAnswer="selectAnswer($event.qIndex, $event.index, $event.newValue)"
         :questions="qSetData.questions"/>
     </div>
 
@@ -42,7 +42,6 @@ export default {
   },
   data: () => ({
     qSetData: {},
-    answers: [],
     state: 0,
     isAvailable: true,
   }),
@@ -60,10 +59,8 @@ export default {
       .then((snapshot) => {
         this.qSetData = snapshot.val()
         this.isStillAvailable()
-        this.createAswers(this.qSetData.questions)
       })
       .catch((err) => {
-        console.error(err)
         this.$noty.error('Network error')
       })
     },
@@ -71,31 +68,12 @@ export default {
       this.state++
       this.getAndUpdateStatistics()
     },
-    createAswers(questions) {
-      questions.forEach(question => {
-        let selectedAnswers = []
-
-        if (question.answers) {
-          question.answers.forEach(() => {
-            selectedAnswers.push(-1)
-          })
-        } else {
-          selectedAnswers.push(-1)
-        }
-
-        this.answers.push({
-          selectedAnswers,
-          message: '',
-        })
-      });
-    },
     getAndUpdateStatistics() {
       firebase.database().ref(`/statistics/${this.$route.params.id}`).once('value')
       .then((snapshot) => {
         this.updateStatistics(snapshot.val() || {})
       })
       .catch((err) => {
-        console.error(err)
         this.$noty.error('Cant get statistct')
       })
     },

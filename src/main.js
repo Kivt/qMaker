@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import axios from "axios"
 import VueAxios from "vue-axios"
+import { EventBus } from "@/eventBus.js"
 import VueCookie from 'vue-cookie'
 import Vuetify from 'vuetify'
 import firebase from 'firebase'
@@ -22,6 +23,14 @@ Vue.use(VueNoty, {
 	timeout: 2500
 })
 
+Object.defineProperties(Vue.prototype, {
+  $bus: {
+    get: function () {
+      return EventBus
+    },
+  },
+})
+
 Vue.config.productionTip = false
 
 firebase.initializeApp(config)
@@ -34,7 +43,7 @@ firebase.auth().onAuthStateChanged((user) => {
 			return {
 				currentUser: user
 			}
-		}
+		},
 	})
 })
 

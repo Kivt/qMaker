@@ -12,7 +12,7 @@
             {{ introData.text }}
           </div>
 
-          <div class="avesome-divider my-3"></div>
+          <div class="awesome-divider my-3"></div>
 
           <div class="footer">
             <img

@@ -2,12 +2,15 @@
   <v-layout :justify-center="centered">
     <v-icon
       class="mx-3"
+      :class="{'transparent': index <= hoveredItem }"
       x-large
       color="amber darken-2"
+      @mouseover="hoveredItem = index"
+      @mouseleave="hoveredItem = -1"
       v-for="(star, index) in maxRating"
       @click=" starClick(index)"
       :key="index">
-      {{ index > selecterStar ? 'star_border' : 'star' }}
+      {{ index > selectedStar ? 'star_border' : 'star' }}
     </v-icon>
   </v-layout>
 </template>
@@ -23,16 +26,18 @@ export default {
     maxRating: {
       type: Number,
       default: 3,
-    }
+    },
+    selectedStar: {
+      type: Number,
+    },
   },
   data: () => ({
-    selecterStar: -1,
+    hoveredItem: -1,
   }),
   methods: {
     starClick(index) {
-      this.$emit('starClick', index)
-      this.selecterStar = index
-    }
+      this.$bus.$emit('starClick', { position: 0 , newValue: index })
+    },
   },
 }
 </script>
@@ -40,5 +45,9 @@ export default {
 <style scoped>
 i {
   cursor: pointer;
+}
+
+i.transparent {
+  opacity: .6;
 }
 </style>

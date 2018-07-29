@@ -85,19 +85,16 @@ export default {
       dueTo: null,
       intro: {
         text: '',
-        bg: ''
+        bg: true
       },
       endPage: {
         text: '',
-        bg: ''
+        bg: true
       },
       questions: [
         {
           question: '',
-          image: '',
           maxRating: 3,
-          timeForAnswer: 0,
-          id: 'q-' + Date.now(),
           required: 'not required',
           answerType: 'single',
           answers: []
@@ -109,10 +106,7 @@ export default {
     addQuestion () {
       const newQuestion = {
         question: '',
-        image: '',
         maxRating: 3,
-        timeForAnswer: 0,
-        id: 'q-' + Date.now(),
         required: 'not required',
         answerType: 'single',
         answers: []
@@ -123,14 +117,25 @@ export default {
     addAnswer () {
       this.qInfo.questions[this.activeQuestion].answers.push({answer: ''})
     },
+    createStatistics(id) {
+      firebase.database().ref().child('statistics').update({
+        [id]: {
+          wasStarted: 0,
+          wasFinished: 0
+        }
+      }, () => {
+        this.$router.push('/')
+      })
+    },
     saveQuestionSet () {
       let author = this.$root.currentUser.uid
+      let id = Date.now()
 
       firebase.database().ref().child('question_sets').update({
-        [Date.now()]: {...this.qInfo, author}
+        [id]: {...this.qInfo, author}
       }, () => {
         this.$noty.success('Question list saved')
-        this.$router.push({name: 'Home'})
+        this.createStatistics(id)
       })
     },
   },

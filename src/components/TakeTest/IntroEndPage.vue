@@ -3,7 +3,7 @@
     <img
       class="bg-image"
       v-if="pageData.bg"
-      :src="pageData.bg"
+      src="https://wallpaperbrowse.com/media/images/dd170f37d84b3b21635f2ece8d416afa_large.jpeg"
       alt="background">
 
       <div class="content">

@@ -81,26 +81,26 @@ export default {
     Alert
   },
   data: () => ({
-    questionList: {}
+    questionList: {},
+    myQuestionList: {},
   }),
-  computed: {
-    myQuestionList() {
-      return Object.keys(this.questionList).reduce((obj, key) => {
-        if (this.questionList[key].author = this.$root.currentUser.uid) {
-          obj[key] = this.questionList[key]
-        }
-        return obj
-      }, {})
-    },
-  },
   created () {
     firebase.database().ref('question_sets').on('value', (snapshot) => {
       this.updateQuestionList(snapshot.val())
+      this.updateMyQuestionList()
     })
   },
   methods: {
     updateQuestionList (value) {
       this.questionList = value
+    },
+    updateMyQuestionList() {
+      this.myQuestionList = Object.keys(this.questionList).reduce((obj, key) => {
+        if (this.questionList[key].author === this.$root.currentUser.uid) {
+          obj[key] = this.questionList[key]
+        }
+        return obj
+      }, {})
     },
     goToQuestionDetails () {
       // TODO

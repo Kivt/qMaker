@@ -67,6 +67,9 @@ export default {
   watch: {
     selected(newVal) {
       this.$bus.$emit('multipleChange', newVal)
+    },
+    answer(data) {
+      this.selected = data.selectedAnswers
     }
   }
 }

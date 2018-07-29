@@ -90,12 +90,12 @@ export default {
       firebase.database().ref(`statistics`).update({
         [this.$route.params.id]: {
           ...oldStat,
-          wasFinished: (parseInt(oldStat.wasFinished || 0)) + 1
+          wasFinished: oldStat.wasFinished + 1
         }
       })
     },
     createAnswers() {
-      this.questions.forEach(question => {
+      this.questions.forEach(() => {
         this.answers.push({
           selectedAnswers: [],
           message: '',

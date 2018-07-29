@@ -75,7 +75,7 @@ export default {
         this.isStillAvailable()
         this.isReady = true
       })
-      .catch((err) => {
+      .catch(() => {
         this.$noty.error('Network error')
         this.isReady = true
       })
@@ -93,7 +93,7 @@ export default {
       firebase.database().ref(`statistics`).update({
         [this.$route.params.id]: {
           ...oldStat,
-          wasStarted: (parseInt(oldStat.wasStarted || 0)) + 1
+          wasStarted: oldStat.wasStarted + 1
         }
       })
     },

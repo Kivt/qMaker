@@ -8,12 +8,11 @@
       </v-flex>
 
       <v-flex xs12 md10>
-        <v-text-field
-          hint="Only URL"
+        <v-checkbox
+          label="Background for intro page"
+          color="primary"
           v-model="qInfo.intro.bg"
-          solo
-          label="Intro Background">
-        </v-text-field>
+        ></v-checkbox>
       </v-flex>
     </v-layout>
 
@@ -42,12 +41,11 @@
       </v-flex>
 
       <v-flex xs12 md10>
-        <v-text-field
-          hint="Only URL"
+        <v-checkbox
+          label="Background for final page"
           v-model="qInfo.endPage.bg"
-          solo
-          label="Final page background">
-        </v-text-field>
+          color="primary"
+        ></v-checkbox>
       </v-flex>
     </v-layout>
 

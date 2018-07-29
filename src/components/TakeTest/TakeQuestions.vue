@@ -50,6 +50,8 @@
 <script>
 import Indicator from '@/components/CreateQuestion/QuestionsIndicator'
 import SingleQuestion from '@/components/TakeTest/SingleQuestion'
+import getStatistics from '@/mixins/getStatistics'
+import firebase from 'firebase'
 
 export default {
   name: 'TakeQuestions',
@@ -63,6 +65,7 @@ export default {
       default: () => ([]),
     },
   },
+  mixins: [getStatistics],
   data: () => ({
     activeQuestion: 0,
     answers: [],
@@ -78,7 +81,18 @@ export default {
   },
   methods: {
     finishTest() {
-      console.log(this.answers)
+      this.getStatistics().then(snapshot => {
+        this.updateStatistics(snapshot.val() || {})
+        this.$emit('endTest')
+      })
+    },
+    updateStatistics(oldStat) {
+      firebase.database().ref(`statistics`).update({
+        [this.$route.params.id]: {
+          ...oldStat,
+          wasFinished: (parseInt(oldStat.wasFinished || 0)) + 1
+        }
+      })
     },
     createAnswers() {
       this.questions.forEach(question => {

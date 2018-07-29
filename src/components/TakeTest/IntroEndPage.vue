@@ -2,14 +2,14 @@
   <div class="wrapper">
     <img
       class="bg-image"
-      v-if="introData.bg"
-      :src="introData.bg"
+      v-if="pageData.bg"
+      :src="pageData.bg"
       alt="background">
 
       <div class="content">
         <div class="transparent-bg">
           <div class="header display-1">
-            {{ introData.text }}
+            {{ pageData.text }}
           </div>
 
           <div class="awesome-divider my-3"></div>
@@ -41,9 +41,18 @@
             
             <v-btn
               large
+              v-if="start"
               @click="$emit('start')"
               color="success">
               Start
+            </v-btn>
+
+            <v-btn
+              large
+              v-else
+              @click="$router.push('/')"
+              color="success">
+              Back to Home
             </v-btn>
           </div>
         </div>
@@ -55,7 +64,7 @@
 export default {
   name: 'StartPage',
   props: {
-    introData: {
+    pageData: {
       type: Object,
       default() {
         return {
@@ -64,6 +73,10 @@ export default {
         }
       },
     },
+    start: {
+      type: Boolean,
+      default: true
+    }
   },
 }
 </script>

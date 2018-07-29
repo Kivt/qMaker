@@ -18,7 +18,7 @@
 
             <v-list>
               <v-list-tile
-                v-for="(question, index) in questionList"
+                v-for="(question, index) in myQuestionList"
                 @click="goToQuestionDetails"
                 :key="index">
                 <v-list-tile-content>
@@ -46,10 +46,6 @@
           <v-card>
             <v-card-title primary-title>
               <h3>Available Question Sets</h3>
-              <v-spacer></v-spacer>
-              <v-btn icon ripple>
-                <v-icon>chevron_right</v-icon>
-              </v-btn>
             </v-card-title>
 
             <v-list>
@@ -87,6 +83,16 @@ export default {
   data: () => ({
     questionList: {}
   }),
+  computed: {
+    myQuestionList() {
+      return Object.keys(this.questionList).reduce((obj, key) => {
+        if (this.questionList[key].author = this.$root.currentUser.uid) {
+          obj[key] = this.questionList[key]
+        }
+        return obj
+      }, {})
+    },
+  },
   created () {
     firebase.database().ref('question_sets').on('value', (snapshot) => {
       this.updateQuestionList(snapshot.val())

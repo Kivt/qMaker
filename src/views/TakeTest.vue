@@ -1,19 +1,26 @@
 <template>
   <div>
     <div v-if="isAvailable">
-      <start-page
+      <intro-end-page
         v-if="state === 0"
         @start="startTest"
-        :introData="qSetData.intro" />
+        :start="true"
+        :pageData="qSetData.intro" />
 
       <take-questions
         v-if="state === 1"
-        @selectAnswer="selectAnswer($event.qIndex, $event.index, $event.newValue)"
+        @endTest="state = 2"
         :questions="qSetData.questions"/>
+
+      <intro-end-page
+        v-if="state === 2"
+        @start="startTest"
+        :start="false"
+        :pageData="qSetData.endPage" />
     </div>
 
     <div
-      v-else
+      v-if="!isAvailable && isReady"
       class="msg-holder">
       <div class="display-3">
         This question set is not available anymore
@@ -26,24 +33,31 @@
         Back To Home
       </v-btn>
     </div>
+
+    <loader v-if="!isReady" />
   </div>
 </template>
 
 <script>
 import firebase from 'firebase'
-import StartPage from '@/components/TakeTest/StartPage'
+import IntroEndPage from '@/components/TakeTest/IntroEndPage'
 import TakeQuestions from '@/components/TakeTest/TakeQuestions'
+import getStatistics from '@/mixins/getStatistics'
+import Loader from '@/components/Loader'
 
 export default {
   name: 'TakeTest',
   components: {
-    StartPage,
+    IntroEndPage,
     TakeQuestions,
+    Loader,
   },
+  mixins: [getStatistics],
   data: () => ({
     qSetData: {},
     state: 0,
-    isAvailable: true,
+    isReady: false,
+    isAvailable: false,
   }),
   created() {
     this.getQuestionSetData()
@@ -59,22 +73,20 @@ export default {
       .then((snapshot) => {
         this.qSetData = snapshot.val()
         this.isStillAvailable()
+        this.isReady = true
       })
       .catch((err) => {
         this.$noty.error('Network error')
+        this.isReady = true
       })
     },
     startTest() {
-      this.state++
       this.getAndUpdateStatistics()
+      this.state++
     },
     getAndUpdateStatistics() {
-      firebase.database().ref(`/statistics/${this.$route.params.id}`).once('value')
-      .then((snapshot) => {
+      this.getStatistics().then(snapshot => {
         this.updateStatistics(snapshot.val() || {})
-      })
-      .catch((err) => {
-        this.$noty.error('Cant get statistct')
       })
     },
     updateStatistics(oldStat) {
@@ -84,8 +96,8 @@ export default {
           wasStarted: (parseInt(oldStat.wasStarted || 0)) + 1
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

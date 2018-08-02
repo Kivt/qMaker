@@ -118,10 +118,27 @@ export default {
       this.qInfo.questions[this.activeQuestion].answers.push({answer: ''})
     },
     createStatistics(id) {
+      let statsData = this.qInfo.questions.map((question) => {
+        if (question.answers.length === 0) {
+          
+          for (let i = question.maxRating; i > 0; i--) {
+            question.answers.push({timesSelected: 0})
+          }
+        }
+
+        question.answers = question.answers.map((answer) => {
+          answer.timesSelected = 0
+          return answer
+        })
+
+        return question
+      })
+
       firebase.database().ref().child('statistics').update({
         [id]: {
           wasStarted: 0,
-          wasFinished: 0
+          wasFinished: 0,
+          questions: statsData,
         }
       }, () => {
         this.$router.push('/')

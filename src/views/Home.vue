@@ -18,17 +18,17 @@
 
             <v-list>
               <v-list-tile
-                v-for="(question, index) in myQuestionList"
-                @click="goToQuestionDetails"
+                v-for="(key, value, index) in myQuestionList"
+                @click="goToQuestionDetails(value)"
                 :key="index">
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ question.name }}</v-list-tile-title>
+                  <v-list-tile-title>{{ key.name }}</v-list-tile-title>
                 </v-list-tile-content>
 
                 <v-list-tile-content>
                   <v-list-tile-sub-title
-                    :class="(question.type === 'private' ? 'red' : 'green') + '--text'">
-                    {{ question.type }}
+                    :class="(key.type === 'private' ? 'red' : 'green') + '--text'">
+                    {{ key.type }}
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
 
@@ -86,24 +86,24 @@ export default {
   }),
   created () {
     firebase.database().ref('question_sets').on('value', (snapshot) => {
-      this.updateQuestionList(snapshot.val())
-      this.updateMyQuestionList()
+      this.updateQuestionList(snapshot.val() || {})
+      this.updateMyQuestionList(snapshot.val() || {})
     })
   },
   methods: {
     updateQuestionList (value) {
       this.questionList = value
     },
-    updateMyQuestionList() {
-      this.myQuestionList = Object.keys(this.questionList).reduce((obj, key) => {
+    updateMyQuestionList(list) {
+      this.myQuestionList = Object.keys(list).reduce((obj, key) => {
         if (this.questionList[key].author === this.$root.currentUser.uid) {
           obj[key] = this.questionList[key]
         }
         return obj
       }, {})
     },
-    goToQuestionDetails () {
-      // TODO
+    goToQuestionDetails (id) {
+      this.$router.push(`/statistics/${id}`)
     },
     goToTest(testId) {
       this.$router.push(`/test/${testId}`)

@@ -87,9 +87,20 @@ export default {
       })
     },
     updateStatistics(oldStat) {
+      let newQuestions = oldStat.questions.map((question, qIndex) => {
+        if (this.answers[qIndex].selectedAnswers.length > 0) {
+          this.answers[qIndex].selectedAnswers.forEach((el) => {
+            question.answers[el].timesSelected += 1
+          })
+        }
+
+        return question
+      })
+
       firebase.database().ref(`statistics`).update({
         [this.$route.params.id]: {
           ...oldStat,
+          questions: newQuestions,
           wasFinished: oldStat.wasFinished + 1
         }
       })

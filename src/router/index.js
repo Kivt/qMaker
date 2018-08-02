@@ -47,6 +47,12 @@ const router = new VueRouter({
           component: () => import('@/views/CreateQuestions'),
           props: true,
         },
+        {
+          path: 'statistics/:id',
+          name: 'Statistics',
+          component: () => import('@/views/QuestionsStatistics'),
+          props: true
+        }
       ],
     },
     {

@@ -5,7 +5,7 @@ export default {
   extends: Bar,
   mixins: [reactiveProp],
   props: ['options'],
-  name: 'LineChart',
+  name: 'BarChart',
   methods: {
     mounted () {
       // this.chartData is created in the mixin.

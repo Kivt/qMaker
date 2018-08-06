@@ -42,7 +42,7 @@
 import firebase from 'firebase'
 import IntroEndPage from '@/components/TakeTest/IntroEndPage'
 import TakeQuestions from '@/components/TakeTest/TakeQuestions'
-import getStatistics from '@/mixins/getStatistics'
+import Statistics from '@/mixins/Statistics'
 import Loader from '@/components/Loader'
 
 export default {
@@ -52,7 +52,7 @@ export default {
     TakeQuestions,
     Loader,
   },
-  mixins: [getStatistics],
+  mixins: [Statistics],
   data: () => ({
     qSetData: {},
     state: 0,

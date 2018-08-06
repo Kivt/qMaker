@@ -50,7 +50,7 @@
 <script>
 import Indicator from '@/components/CreateQuestion/QuestionsIndicator'
 import SingleQuestion from '@/components/TakeTest/SingleQuestion'
-import getStatistics from '@/mixins/getStatistics'
+import Statistics from '@/mixins/Statistics'
 import firebase from 'firebase'
 
 export default {
@@ -65,7 +65,7 @@ export default {
       default: () => ([]),
     },
   },
-  mixins: [getStatistics],
+  mixins: [Statistics],
   data: () => ({
     activeQuestion: 0,
     answers: [],

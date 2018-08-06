@@ -1,53 +1,79 @@
 <template>
   <div>
-    <v-layout row justify-center py-4>
-      <div class="chart-wrapper">
-        <bar-chart
-          :chart-data="datacollection">
-        </bar-chart>
-      </div>
+    <v-layout row wrap justify-center pt-4>
+      <v-flex d-flex xs12 md4 xl3 mb-3>
+        <v-card class="chart-wrapper pa-2">
+          <bar-chart
+            :chart-data="datacollection">
+          </bar-chart>
+        </v-card>
+      </v-flex>
+
+      <v-flex d-flex xs12 md8 xl9 mb-3>
+        <v-card class="pa-2">
+          <single-question-statistics 
+            :questionInfo="questions[currentQuestion]"/>
+        </v-card>
+      </v-flex>
     </v-layout>
 
-  <v-layout>
-    <v-flex>
-      <button @click="fillData()">Randomize</button>
-    </v-flex>
-  </v-layout>
+    <v-layout row wrap justify-center>
+      <question-preview
+        @click="selectQuestion($event)"
+        :currentQuestion="currentQuestion"
+        :questions="questions" />
+    </v-layout>
   </div>
 </template>
 
 <script>
 import BarChart from '@/components/Statistics/BarChart.js'
-import getStatistics from '@/mixins/getStatistics'
+import Statistics from '@/mixins/Statistics'
+import QuestionPreview from '@/components/Statistics/QuestionPreview'
+import SingleQuestionStatistics from '@/components/Statistics/SingleQuestionStatistics'
 
 export default {
   name: 'QuestionsStatistics',
-  mixins: [getStatistics],
+  mixins: [Statistics],
   components: {
     BarChart,
+    QuestionPreview,
+    SingleQuestionStatistics,
   },
   data () {
     return {
-      datacollection: null
+      datacollection: null,
+      completionRate: 0,
+      currentQuestion: 0,
+      questions: [],
     }
   },
   mounted () {
-    this.getData()
-    this.fillData()
+    this.setInitialData()
   },
   methods: {
-    getData() {
+    selectQuestion(index) {
+      this.currentQuestion = index
+    },
+    setInitialData() {
       this.getStatistics().then(snapshot => {
-        console.log(snapshot.val())
+        const value = snapshot.val()
+        const data = {
+          labels: ['Started', 'Finished'],
+          data: [value.wasStarted, value.wasFinished],
+          label:  'Questions statistics',
+        }
+        this.questions = value.questions
+        this.fillData(data)
       })
     },
-    fillData () {
+    fillData (data) {
       this.datacollection = {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: data.labels,
         datasets: [
           {
-            label: 'Questions statistics',
-            data: [10, 20, 3, 5, 2, 15, 0],
+            label: data.label,
+            data: [...data.data, 0, 10],
             backgroundColor: [
               "rgba(255, 99, 132, 0.6)",
               "rgba(54, 162, 235, 0.6)",
@@ -66,20 +92,23 @@ export default {
             ],
             borderWidth: 1
           },
-        ]
+        ],
+         options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero:true
+              }
+            }]
+          }
+        }
       }
-    },
-    getRandomInt () {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
     },
   },
 }
 </script>
 <style scoped>
 .chart-wrapper {
-  border: 1px solid red;
-  padding: 10px;
-  display: flex;
   max-width: 100%;
 }
 </style>

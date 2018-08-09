@@ -12,7 +12,12 @@
       <v-flex d-flex xs12 md8 xl9 mb-3>
         <v-card class="pa-2">
           <single-question-statistics 
-            :questionInfo="questions[currentQuestion]"/>
+            v-if="questions[currentQuestion]"
+            :questionInfo="questions[currentQuestion]" />
+
+          <h1 class="display-2 text-center mt-3" v-else>
+            Select question
+          </h1>
         </v-card>
       </v-flex>
     </v-layout>
@@ -44,7 +49,7 @@ export default {
     return {
       datacollection: null,
       completionRate: 0,
-      currentQuestion: 0,
+      currentQuestion: -1,
       questions: [],
     }
   },
@@ -54,6 +59,21 @@ export default {
   methods: {
     selectQuestion(index) {
       this.currentQuestion = index
+      let stats = this.questions[index].answers.reduce((prev, curr) => {
+        return [...prev, curr.timesSelected]
+      }, [])
+
+      const labels = Object.keys(this.questions[index].answers).map((e) => {
+        return parseInt(e) + 1
+      })
+
+      const data = {
+        labels,
+        data: stats,
+        label: `Question ${index + 1}`
+      }
+
+      this.fillData(data)
     },
     setInitialData() {
       this.getStatistics().then(snapshot => {
@@ -61,7 +81,7 @@ export default {
         const data = {
           labels: ['Started', 'Finished'],
           data: [value.wasStarted, value.wasFinished],
-          label:  'Questions statistics',
+          label:  'Completion rate',
         }
         this.questions = value.questions
         this.fillData(data)
@@ -80,9 +100,21 @@ export default {
               "rgba(255, 206, 86, 0.6)",
               "rgba(75, 192, 192, 0.6)",
               "rgba(153, 102, 255, 0.6)",
+              "rgba(255, 159, 64, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(54, 162, 235, 0.6)",
+              "rgba(255, 206, 86, 0.6)",
+              "rgba(75, 192, 192, 0.6)",
+              "rgba(153, 102, 255, 0.6)",
               "rgba(255, 159, 64, 0.6)"
             ],
             borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
               'rgba(255,99,132,1)',
               'rgba(54, 162, 235, 1)',
               'rgba(255, 206, 86, 1)',
@@ -92,16 +124,7 @@ export default {
             ],
             borderWidth: 1
           },
-        ],
-         options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero:true
-              }
-            }]
-          }
-        }
+        ]
       }
     },
   },

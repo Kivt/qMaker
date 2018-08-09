@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+.border-bottom {
+  border-bottom: 1px solid #ddd;
+}
+
 .no-margin {
   margin: 0;
 }

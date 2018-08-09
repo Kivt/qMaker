@@ -81,10 +81,23 @@ export default {
   },
   methods: {
     finishTest() {
-      this.getStatistics().then(snapshot => {
-        this.updateStatistics(snapshot.val() || {})
-        this.$emit('endTest')
+      if (this.validateTest()) {
+        this.getStatistics().then(snapshot => {
+          this.updateStatistics(snapshot.val() || {})
+          this.$emit('endTest')
+        })
+      }
+    },
+    validateTest () {
+      let isValid = true
+      this.questions.forEach((el, index) => {
+        if (el.required === 'required' && this.answers[index].selectedAnswers.length === 0) {
+          isValid = false
+          this.$noty.error(`Question ${index + 1} is required`)
+        }
       })
+
+      return isValid
     },
     updateStatistics(oldStat) {
       let newQuestions = oldStat.questions.map((question, qIndex) => {

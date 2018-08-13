@@ -13,7 +13,11 @@ const router = new VueRouter({
       name: 'Login',
       component: () => import('@/views/Login'),
     },
-    
+    {
+      path: '/recovery',
+      name: 'Recovery',
+      component: () => import('@/views/PassRecovery')
+    },
     {
       path: '/signup',
       name: 'Sign Up',

@@ -57,6 +57,7 @@ export default {
         firebase.database().ref('users/' + user.user.uid).set({
           email: user.user.email,
           userId: user.user.uid,
+          questions: [],
           userName: 'NoName'
         })
         user.user.sendEmailVerification().then(() => {

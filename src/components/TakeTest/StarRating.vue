@@ -1,9 +1,8 @@
 <template>
-  <v-layout :justify-center="centered">
+  <v-layout :justify-center="centered" wrap>
     <v-icon
       class="mx-3"
       :class="{'transparent': index <= hoveredItem }"
-      x-large
       color="amber darken-2"
       @mouseover="hoveredItem = index"
       @mouseleave="hoveredItem = -1"
@@ -45,6 +44,13 @@ export default {
 <style scoped>
 i {
   cursor: pointer;
+  font-size: 40px;
+}
+
+@media screen and (max-width: 400px) {
+  i {
+    font-size: 20px;
+  } 
 }
 
 i.transparent {

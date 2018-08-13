@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+.cur-p {
+  cursor: pointer!important;
+}
+
 .border-bottom {
   border-bottom: 1px solid #ddd;
 }
@@ -93,6 +97,24 @@ i {
   animation-name: rotate;
   animation-duration: 5s;
   animation-timing-function: ease-in-out;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all .5s ease-in-out;
+}
+
+.slide-leave-to
+/* .slide-fade-leave-active до версии 2.1.8 */ {
+  transform: perspective(1000px) rotateY(90deg);
+  transform-origin: center center;
+  opacity: .5;
+}
+
+.slide-enter {
+  transform: perspective(1000px) rotateY(-90deg);
+  transform-origin: center center;
+  opacity: .5;
 }
 
 @keyframes rotate {

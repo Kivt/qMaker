@@ -1,6 +1,6 @@
 <template>
   <v-toolbar app>
-		<v-toolbar-title @click="$router.push('/')">qMaker</v-toolbar-title>
+		<v-toolbar-title class="cur-p" @click="$router.push('/')">qMaker</v-toolbar-title>
 
     <v-spacer></v-spacer>
     <div>{{user.userName}}</div>
@@ -48,10 +48,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.toolbar__title,
-.toolbar__title:hover {
-  cursor: pointer!important;
-}
-</style>

@@ -110,7 +110,7 @@ export default {
       }
       this.isLoading = true
 
-      // get credential
+      // Get credential
       const credential = firebase.auth.EmailAuthProvider.credential(
         this.currentUser.email, 
         this.password

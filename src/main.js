@@ -8,6 +8,7 @@ import VueCookie from 'vue-cookie'
 import Vuetify from 'vuetify'
 import firebase from 'firebase'
 import VueNoty from 'vuejs-noty'
+import SocialSharing from 'vue-social-sharing'
 import config from '@/settings.js'
 
 import 'vuetify/dist/vuetify.min.css'
@@ -16,6 +17,7 @@ import '../static/css/style.css'
 
 Vue.router = router
 
+Vue.use(SocialSharing)
 Vue.use(VueAxios, axios)
 Vue.use(VueCookie)
 Vue.use(Vuetify)

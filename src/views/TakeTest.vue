@@ -75,8 +75,9 @@ export default {
         this.isStillAvailable()
         this.isReady = true
       })
-      .catch(() => {
-        this.$noty.error('Network error')
+      .catch((err) => {
+        console.error(err.message)
+        this.$noty.error('Can\'t get questions')
         this.isReady = true
       })
     },

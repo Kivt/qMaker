@@ -3,7 +3,9 @@
     <toolbar />
 
     <v-content>
-      <router-view></router-view>
+      <transition name="slide" mode="out-in">
+        <router-view class="full-height"></router-view>
+      </transition>
     </v-content>
   </div>
 </template>
@@ -18,3 +20,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.full-height {
+  min-height: calc(100vh - 65px);
+}
+</style>

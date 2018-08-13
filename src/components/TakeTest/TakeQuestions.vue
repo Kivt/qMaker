@@ -4,7 +4,7 @@
       <v-flex>
         <v-card class="py-2">
           <indicator
-            @select="activeQuestion = $event"
+            @select="selectQuestion($event)"
             :active="activeQuestion"
             :isCreateButton="false"
             :amount="questions.length" />
@@ -14,34 +14,36 @@
 
     <v-layout>
       <v-flex>
-        <v-card class="px-2">
-          <single-question
-            :answer="answers[activeQuestion]"
-            :questionData.sync="questions[activeQuestion]" />
+        <transition :name="transitionName">
+          <v-card v-if="isVisible" class="px-2">
+            <single-question
+              :answer="answers[activeQuestion]"
+              :questionData.sync="questions[activeQuestion]" />
 
-          <v-card-actions>
-            <v-btn
-              @click="activeQuestion -= 1"
-              :disabled="activeQuestion === 0">
-              Prev
-            </v-btn>
+            <v-card-actions class="mt-auto">
+              <v-btn
+                @click="selectQuestion(activeQuestion - 1)"
+                :disabled="activeQuestion === 0">
+                Prev
+              </v-btn>
 
-            <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
 
-            <v-btn
-              v-show="activeQuestion < (questions.length - 1)"
-              @click="activeQuestion += 1">
-              Next
-            </v-btn>
+              <v-btn
+                v-show="activeQuestion < (questions.length - 1)"
+                @click="selectQuestion(activeQuestion + 1)">
+                Next
+              </v-btn>
 
-            <v-btn
-              color="success"
-              v-show="activeQuestion === (questions.length - 1)"
-              @click="finishTest">
-              Finish
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+              <v-btn
+                color="success"
+                v-show="activeQuestion === (questions.length - 1)"
+                @click="finishTest">
+                Finish
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </transition>
       </v-flex>
     </v-layout>
   </div>
@@ -68,7 +70,10 @@ export default {
   mixins: [Statistics],
   data: () => ({
     activeQuestion: 0,
+    isVisible: true,
+    transitionName: 'slide-x-transition',
     answers: [],
+    questionInfoHeight: 0
   }),
   created() {
     this.createAnswers()
@@ -86,6 +91,16 @@ export default {
           this.updateStatistics(snapshot.val() || {})
           this.$emit('endTest')
         })
+      }
+    },
+    selectQuestion(newIndex) {
+      if (newIndex !== this.activeQuestion) {
+        this.transitionName = newIndex > this.activeQuestion ? 'slide-x-reverse-transition' : 'slide-x-transition'
+        this.isVisible = false
+        this.activeQuestion = newIndex
+        setTimeout(() => {
+          this.isVisible = true
+        }, 100)
       }
     },
     validateTest () {
@@ -129,4 +144,3 @@ export default {
   },
 }
 </script>
-

@@ -65,6 +65,7 @@ import Indicator from '@/components/CreateQuestion/QuestionsIndicator'
 import FloatingButton from '@/components/CreateQuestion/FloatButton'
 import Settings from '@/components/CreateQuestion/Settings'
 import IntroEndPages from '@/components/CreateQuestion/IntroEndPages'
+import Users from '@/mixins/Users'
 import firebase from 'firebase'
 
 export default {
@@ -76,6 +77,7 @@ export default {
     Settings,
     IntroEndPages,
   },
+  mixins: [Users],
   data: () => ({
     activeQuestion: 0,
     currentTab: 'settings',
@@ -141,7 +143,15 @@ export default {
           questions: statsData,
         }
       }, () => {
-        this.$router.push('/')
+        this.pushQuestionToUser(id)
+      })
+    },
+    pushQuestionToUser (questionSetId) {
+      this.getUserInfo(this.$root.currentUser.uid).then((snapshot) => {
+        let questions = snapshot.val().questions || []
+        this.pushNewQuestion([...questions, questionSetId], () => {
+          this.$router.push('/')
+        })
       })
     },
     saveQuestionSet () {

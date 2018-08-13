@@ -10,12 +10,12 @@
       </v-flex>
 
       <v-flex d-flex xs12 md8 xl9 mb-3>
-        <v-card class="pa-2">
+        <v-card class="pa-2 question-card">
           <single-question-statistics 
             v-if="questions[currentQuestion]"
             :questionInfo="questions[currentQuestion]" />
 
-          <h1 class="display-2 text-center mt-3" v-else>
+          <h1 v-else class="display-2 text-center mt-3">
             Select question
           </h1>
         </v-card>
@@ -131,7 +131,13 @@ export default {
 }
 </script>
 <style scoped>
-.chart-wrapper {
-  max-width: 100%;
-}
+  .chart-wrapper {
+    max-width: 100%;
+  }
+
+  @media screen and (min-width: 1200px){
+    .question-card {
+      min-height: 460px;
+    }
+  }
 </style>

@@ -4,6 +4,7 @@
       <v-flex d-flex xs12 md4 xl3 mb-3>
         <v-card class="chart-wrapper pa-2">
           <bar-chart
+            :options="options"
             :chart-data="datacollection">
           </bar-chart>
         </v-card>
@@ -32,7 +33,8 @@
 </template>
 
 <script>
-import BarChart from '@/components/Statistics/BarChart.js'
+import BarChart from '@/components/Statistics/BarChart'
+import DoughnutChart from '@/components/Statistics/DoughnutChart'
 import Statistics from '@/mixins/Statistics'
 import QuestionPreview from '@/components/Statistics/QuestionPreview'
 import SingleQuestionStatistics from '@/components/Statistics/SingleQuestionStatistics'
@@ -42,6 +44,7 @@ export default {
   mixins: [Statistics],
   components: {
     BarChart,
+    DoughnutChart,
     QuestionPreview,
     SingleQuestionStatistics,
   },
@@ -51,6 +54,7 @@ export default {
       completionRate: 0,
       currentQuestion: -1,
       questions: [],
+      options: {},
     }
   },
   mounted () {
@@ -64,7 +68,7 @@ export default {
       }, [])
 
       const labels = Object.keys(this.questions[index].answers).map((e) => {
-        return parseInt(e) + 1
+        return `№ ${parseInt(e) + 1}`
       })
 
       const data = {
@@ -93,7 +97,7 @@ export default {
         datasets: [
           {
             label: data.label,
-            data: [...data.data, 0, 10],
+            data: [...data.data, 0],
             backgroundColor: [
               "rgba(255, 99, 132, 0.6)",
               "rgba(54, 162, 235, 0.6)",
@@ -101,12 +105,6 @@ export default {
               "rgba(75, 192, 192, 0.6)",
               "rgba(153, 102, 255, 0.6)",
               "rgba(255, 159, 64, 0.6)",
-              "rgba(255, 99, 132, 0.6)",
-              "rgba(54, 162, 235, 0.6)",
-              "rgba(255, 206, 86, 0.6)",
-              "rgba(75, 192, 192, 0.6)",
-              "rgba(153, 102, 255, 0.6)",
-              "rgba(255, 159, 64, 0.6)"
             ],
             borderColor: [
               'rgba(255,99,132,1)',
@@ -115,16 +113,51 @@ export default {
               'rgba(75, 192, 192, 1)',
               'rgba(153, 102, 255, 1)',
               'rgba(255, 159, 64, 1)',
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
             ],
             borderWidth: 1
           },
-        ]
+        ],
+      }
+
+      this.options = {
+        tooltips: {
+          enabled: true,
+        },
+        title: {
+          display: true,
+          text: data.label,
+        },
+        legend: {
+          display: false,
+        },
+        scales: {
+          yAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: 'Times Selected',
+                fontSize: 14,
+              },
+              // gridLines: {
+              //   display: false,
+              //   drawBorder: false,
+              // },
+            },
+          ],
+          xAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: 'Answers',
+                fontSize: 14
+              },
+              // gridLines: {
+              //   display: false,
+              //   drawBorder: false,
+              // },
+            },
+          ],
+        },
       }
     },
   },

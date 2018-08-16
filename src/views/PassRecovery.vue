@@ -7,6 +7,8 @@
           @keyup.enter.native="sendRecoveryLetter">
           <v-toolbar dark color="primary" class="text-xs-center">
             <v-toolbar-title>Password Recovery</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <router-link to="/login" class="white--text">Back to Login</router-link>
           </v-toolbar>
 
           <v-card-text>
@@ -15,7 +17,7 @@
                 prepend-icon="mail"
                 name="email"
                 label="Email"
-                hint="Recovery letter will be sended to this email"
+                hint="We will send letter with instructions to this email"
                 type="email"
                 v-model="email">
               </v-text-field>
@@ -23,15 +25,10 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn
-              @click="$router.push('/')">
-              Back to home
-            </v-btn>
-
             <v-spacer></v-spacer>
 
             <v-btn
-              color="success"
+              color="primary"
               @click="sendRecoveryLetter">
               Send Email
             </v-btn>

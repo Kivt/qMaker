@@ -7,6 +7,7 @@
             @select="selectQuestion($event)"
             :active="activeQuestion"
             :isCreateButton="false"
+            :errors="isValidated ? emptyIndexes : []"
             :amount="questions.length" />
         </v-card>
       </v-flex>
@@ -71,10 +72,22 @@ export default {
   data: () => ({
     activeQuestion: 0,
     isVisible: true,
+    isValidated: false,
     transitionName: 'slide-x-transition',
     answers: [],
     questionInfoHeight: 0
   }),
+  computed: {
+    emptyIndexes() {
+      // array, contains all not unanswered & required questions
+      return this.questions.reduce((result, el, index) => {
+        if (el.required === 'required' && this.answers[index].selectedAnswers.length === 0) {
+          result.push(index)
+        }
+        return result
+      }, [])
+    }
+  },
   created() {
     this.createAnswers()
     this.$bus.$on('starClick', event => {
@@ -105,22 +118,19 @@ export default {
     },
     validateTest () {
       let isValid = true
-      this.questions.forEach((el, index) => {
-        if (el.required === 'required' && this.answers[index].selectedAnswers.length === 0) {
-          isValid = false
-          this.$noty.error(`Question ${index + 1} is required`)
-        }
+      this.emptyIndexes.forEach((el, index) => {
+        this.$noty.error(`Question ${el + 1} is required`)
+        isValid = false
       })
+      this.isValidated = true
 
       return isValid
     },
     updateStatistics(oldStat) {
       let newQuestions = oldStat.questions.map((question, qIndex) => {
-        if (this.answers[qIndex].selectedAnswers.length > 0) {
-          this.answers[qIndex].selectedAnswers.forEach((el) => {
-            question.answers[el].timesSelected += 1
-          })
-        }
+        this.answers[qIndex].selectedAnswers.forEach((el) => {
+          question.answers[el].timesSelected += 1
+        })
 
         return question
       })

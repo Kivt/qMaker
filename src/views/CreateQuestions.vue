@@ -155,16 +155,33 @@ export default {
       })
     },
     saveQuestionSet () {
-      let author = this.$root.currentUser.uid
-      let id = Date.now()
+      if (this.validateQuestions()) {
+        let author = this.$root.currentUser.uid
+        let id = Date.now()
 
-      firebase.database().ref().child('question_sets').update({
-        [id]: {...this.qInfo, author}
-      }, () => {
-        this.$noty.success('Question list saved')
-        this.createStatistics(id)
-      })
+        firebase.database().ref().child('question_sets').update({
+          [id]: {...this.qInfo, author}
+        }, () => {
+          this.$noty.success('Question list saved')
+          this.createStatistics(id)
+        })
+      }
     },
+    validateQuestions() {
+      if (!this.qInfo.name) {
+        this.$noty.error('Question set name is required')
+        return false
+      }
+
+      if (!this.qInfo.intro.text || !this.qInfo.endPage.text) {
+        this.$noty.error('Intro / End Page text is required')
+        return false
+      }
+
+      // TODO
+      
+      return true
+    }
   },
 }
 </script>

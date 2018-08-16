@@ -64,14 +64,14 @@ export default {
   data: () => ({
     selected: []
   }),
+  created() {
+    this.selected = this.answer.selectedAnswers
+  },
   watch: {
     selected(newVal) {
       this.$bus.$emit('multipleChange', newVal)
     },
-    answer(data) {
-      this.selected = data.selectedAnswers
-    }
-  }
+  },
 }
 </script>
 

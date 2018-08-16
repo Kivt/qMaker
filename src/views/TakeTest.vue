@@ -64,20 +64,23 @@ export default {
   },
   methods: {
     isStillAvailable() {
-      let today = new Date()
-      let dueDate = new Date(this.qSetData.dueTo)
-      this.isAvailable = today < dueDate
+      if (this.qSetData.dueTo) {
+        let today = new Date()
+        let dueDate = new Date(this.qSetData.dueTo)
+        return today < dueDate
+      }
+      
+      return true
     },
     getQuestionSetData() {
       firebase.database().ref('/question_sets/' + this.$route.params.id).once('value')
       .then((snapshot) => {
         this.qSetData = snapshot.val()
-        this.isStillAvailable()
+        this.isAvailable = this.isStillAvailable()
         this.isReady = true
       })
       .catch((err) => {
-        console.error(err.message)
-        this.$noty.error('Can\'t get questions')
+        this.$noty.error(err.message)
         this.isReady = true
       })
     },

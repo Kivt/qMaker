@@ -4,7 +4,7 @@
 
     <div v-if="$root.currentUser.emailVerified">
       <v-layout row wrap>
-        <v-flex xs12 md6 lg3 mb-3>
+        <v-flex xs12 md6 mb-3>
           <v-card>
             <v-card-title primary-title>
               <h3>Your questions list</h3>
@@ -115,7 +115,7 @@
           </v-card>
         </v-flex>
 
-        <v-flex xs-12 md6 lg3 mb-3>
+        <v-flex xs-12 md6 mb-3>
           <v-card>
             <v-card-title primary-title>
               <h3>Available Question Sets</h3>

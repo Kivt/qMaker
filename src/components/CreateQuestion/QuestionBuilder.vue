@@ -13,7 +13,7 @@
 
       <v-flex xs12 md6 order-xs1 odrer-md2>
         <v-layout row wrap>
-          <v-flex xs6 pl-0>
+          <v-flex>
             <v-select
               label="Type"
               solo
@@ -23,7 +23,7 @@
             </v-select>
           </v-flex>
 
-          <v-flex xs6 pr-0>
+          <v-flex>
             <v-select
               label="Required"
               v-model="question.required"
@@ -33,7 +33,7 @@
             </v-select>
           </v-flex>
 
-          <v-flex pl-0 xs6 v-if="question.answerType === 'rating'">
+          <v-flex v-if="question.answerType === 'rating'">
             <v-select
               label="Maximal Rating"
               v-model="question.maxRating"
@@ -41,6 +41,26 @@
               :items="[3,5,10]"
               :hide-details="true">
             </v-select>
+          </v-flex>
+
+          <v-flex xs12>
+            <v-layout row wrap>
+              <v-flex xs12 md6 lg4 pl-0>
+                <v-checkbox
+                  label="Inclue TextField ?"
+                  v-model="question.textField.isVisible"
+                ></v-checkbox>
+              </v-flex>
+
+              <v-flex xs12 md6 lg8 pr-0 pl-0>
+                <v-text-field
+                  solo
+                  v-show="question.textField.isVisible"
+                  v-model="question.textField.title"
+                  label="Textfield Title"
+                />
+              </v-flex>
+            </v-layout>
           </v-flex>
         </v-layout>
       </v-flex>

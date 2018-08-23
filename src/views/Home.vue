@@ -24,13 +24,6 @@
                   <v-list-tile-title>{{ key.name }}</v-list-tile-title>
                 </v-list-tile-content>
 
-                <v-list-tile-content>
-                  <v-list-tile-sub-title
-                    :class="(key.type === 'private' ? 'red' : 'green') + '--text'">
-                    {{ key.type }}
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-
                  <v-list-tile-action>
                   <v-menu
                     bottom

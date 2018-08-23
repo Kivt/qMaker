@@ -55,7 +55,7 @@
       </v-tabs>
     </v-card>
 
-    <floating-button  @save="saveQuestionSet" />
+    <floating-button @save="saveQuestionSet" />
   </v-container>
 </template>
 
@@ -93,22 +93,21 @@ export default {
         text: '',
         bg: true
       },
-      questions: [
-        {
-          question: '',
-          maxRating: 3,
-          required: 'not required',
-          answerType: 'single',
-          answers: []
-        },
-      ],
+      questions: [],
     },
   }),
+  created() {
+    this.addQuestion()
+  },
   methods: {
     addQuestion () {
       const newQuestion = {
         question: '',
         maxRating: 3,
+        textField: {
+          isVisible: false,
+          title: '',
+        },
         required: 'not required',
         answerType: 'single',
         answers: []
@@ -168,19 +167,21 @@ export default {
       }
     },
     validateQuestions() {
+      let isValid = true
+
       if (!this.qInfo.name) {
         this.$noty.error('Question set name is required')
-        return false
+        isValid = false
       }
 
       if (!this.qInfo.intro.text || !this.qInfo.endPage.text) {
         this.$noty.error('Intro / End Page text is required')
-        return false
+        isValid = false
       }
 
       // TODO
       
-      return true
+      return isValid
     }
   },
 }

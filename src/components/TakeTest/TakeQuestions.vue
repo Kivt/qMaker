@@ -118,7 +118,7 @@ export default {
     },
     validateTest () {
       let isValid = true
-      this.emptyIndexes.forEach((el, index) => {
+      this.emptyIndexes.forEach((el) => {
         this.$noty.error(`Question ${el + 1} is required`)
         isValid = false
       })
